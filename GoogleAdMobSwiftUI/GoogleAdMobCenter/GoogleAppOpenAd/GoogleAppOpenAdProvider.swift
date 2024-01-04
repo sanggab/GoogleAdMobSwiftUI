@@ -20,7 +20,7 @@ public extension UIApplication {
 
 public final class GoogleAppOpenAdProvider: NSObject, GADFullScreenContentDelegate {
     private var appOpenAd: GADAppOpenAd?
-    private var loadTime = Date()
+    private var loadTime: Date?
     private var viewController: UIViewController?
     
     @Published public var loadingAd: Bool = false
@@ -44,8 +44,13 @@ public final class GoogleAppOpenAdProvider: NSObject, GADFullScreenContentDelega
         
         GADAppOpenAd.load(withAdUnitID: "ca-app-pub-3940256099942544/5575463023", request: GADRequest()) { [weak self] openAd, error in
             guard let `self` = self else { return }
-            print("openAd -> \(openAd)")
-            print("error -> \(error)")
+            if let error {
+                self.appOpenAd = nil
+                self.loadTime = nil
+                print("App open ad failed to load with error: \(error.localizedDescription)")
+                return
+            }
+            
             self.appOpenAd = openAd
             self.appOpenAd?.fullScreenContentDelegate = self
             self.loadTime = Date()
