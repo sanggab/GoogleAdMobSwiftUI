@@ -18,55 +18,114 @@ public extension UIApplication {
     }
 }
 
-public final class GoogleAppOpenAdProvider: NSObject, GADFullScreenContentDelegate {
+public protocol GoogleAppOpenAdFeatures: AnyObject {
+    var viewModel: GoogleAppOpenAdViewModel { get }
+
+    func setRootViewController(vc: UIViewController?)
+    func requestAppOpenAd()
+    func tryToPresentAd()
+    
+    static func makeFeatures() -> GoogleAppOpenAdFeatures
+    
+    func eraseToProvider() -> GoogleAppOpenAdProvider
+    
+}
+
+public final class GoogleAppOpenAdProvider: NSObject, GoogleAppOpenAdFeatures {
     private var appOpenAd: GADAppOpenAd?
+    private let timeoutInterval: TimeInterval = 4 * 3_600
     private var loadTime: Date?
-    private var viewController: UIViewController?
+    private var rootViewController: UIViewController?
     
-    @Published public var loadingAd: Bool = false
-    @Published public var dismissAd: Bool = false
+    @ObservedObject public var viewModel: GoogleAppOpenAdViewModel = .init()
     
-    public static let shared = GoogleAppOpenAdProvider()
+    private override init() {}
     
-//    public init(viewController: UIViewController) {
-//        self.viewController = viewController
-//    }
+    public func setRootViewController(vc: UIViewController?) {
+        self.rootViewController = vc
+    }
     
-    func requestAppOpenAd() {
-        print("requestAppOpenAd")
-        self.appOpenAd = nil
-        
-        guard let root = UIApplication.shared.firstKeyWindow?.rootViewController else {
-            return
-        }
-        
-        self.viewController = root
-        
-        GADAppOpenAd.load(withAdUnitID: "ca-app-pub-3940256099942544/5575463023", request: GADRequest()) { [weak self] openAd, error in
-            guard let `self` = self else { return }
-            if let error {
-                self.appOpenAd = nil
-                self.loadTime = nil
-                print("App open ad failed to load with error: \(error.localizedDescription)")
-                return
+    public func loadAppOpenAd() async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            GADAppOpenAd.load(withAdUnitID: "ca-app-pub-3940256099942544/5575463023", request: GADRequest()) { [weak self] openAd, error in
+                guard let `self` = self else { return }
+                if let error {
+                    self.appOpenAd = nil
+                    self.loadTime = nil
+                    self.viewModel.isLoadedAd = false
+                    print("App open ad failed to load with error: \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                }
+                
+                self.appOpenAd = openAd
+                self.appOpenAd?.fullScreenContentDelegate = self
+                self.loadTime = Date()
+                
+                self.viewModel.isLoadedAd = true
+                
+                continuation.resume(returning: ())
             }
-            
-            self.appOpenAd = openAd
-            self.appOpenAd?.fullScreenContentDelegate = self
-            self.loadTime = Date()
-            
-            self.loadingAd = true
         }
     }
     
-    func tryToPresentAd() {
-        
-        if let appOpenAd, let viewController {
-            appOpenAd.present(fromRootViewController: viewController)
-        } else {
+    public func requestAppOpenAd() {
+        print("requestAppOpenAd")
+        Task {
+            do {
+                guard self.rootViewController != nil else {
+                    throw GAError.AppOpenAd.notFoundItem(.rootViewController)
+                }
+                
+                try await self.loadAppOpenAd()
+            } catch {
+                print("error -> \(error)")
+            }
+        }
+
+    }
+    
+    public func tryToPresentAd() {
+        do {
+            
+            guard let appOpenAd else {
+                throw GAError.AppOpenAd.notFoundItem(.ad)
+            }
+            
+            guard let rootViewController else {
+                throw GAError.AppOpenAd.notFoundItem(.rootViewController)
+            }
+            
+            try appOpenAd.canPresent(fromRootViewController: rootViewController)
+            
+            appOpenAd.present(fromRootViewController: rootViewController)
+            
+        } catch {
+            print("error -> \(error.localizedDescription)")
             requestAppOpenAd()
         }
     }
+}
+
+extension GoogleAppOpenAdProvider {
+    
+    private func wasLoadTimeLessThanNHoursAgo(timeoutInterval: TimeInterval) -> Bool {
+        guard let loadTime else {
+            return false
+        }
+        
+        return Date().timeIntervalSince(loadTime) < timeoutInterval
+    }
+    
+    public static func makeFeatures() -> GoogleAppOpenAdFeatures {
+        return GoogleAppOpenAdProvider()
+    }
+    
+    public func eraseToProvider() -> GoogleAppOpenAdProvider {
+        return self
+    }
+}
+
+extension GoogleAppOpenAdProvider: GADFullScreenContentDelegate {
     
     public func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         print("error -> \(error)")
@@ -74,11 +133,14 @@ public final class GoogleAppOpenAdProvider: NSObject, GADFullScreenContentDelega
     
     public func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("adWillPresentFullScreenContent")
+        viewModel.isShowingAd = true
     }
     
     public func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("adDidDismissFullScreenContent")
-        dismissAd = true
+        appOpenAd = nil
+        viewModel.isLoadedAd = false
+        viewModel.isShowingAd = false
     }
     
     public func adWillDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {

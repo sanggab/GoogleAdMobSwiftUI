@@ -12,12 +12,9 @@ import GoogleMobileAds
 struct GoogleAdMobSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            GoogleAppOpenAdView()
                 .onAppear {
                     GADMobileAds.sharedInstance().start(completionHandler: nil)
-                }
-                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in print("didBecomeActiveNotification")
-                    GoogleAppOpenAdProvider.shared.requestAppOpenAd()
                 }
         }
         
