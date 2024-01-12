@@ -21,6 +21,11 @@
 		EF176B2A2B467B100067609C /* GoogleAppOpenAdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF176B292B467B100067609C /* GoogleAppOpenAdViewModel.swift */; };
 		EF176B2C2B4686470067609C /* CustomOpenAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF176B2B2B4686470067609C /* CustomOpenAdView.swift */; };
 		EF176B2F2B477E310067609C /* GAError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF176B2E2B477E310067609C /* GAError.swift */; };
+		EFC877AC2B491C260050FE01 /* GoogleRewardAdProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC877AB2B491C260050FE01 /* GoogleRewardAdProvider.swift */; };
+		EFC877AE2B491C2E0050FE01 /* GoogleBannerAdProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC877AD2B491C2E0050FE01 /* GoogleBannerAdProvider.swift */; };
+		EFC877B02B491C370050FE01 /* GoogleNativeAdProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC877AF2B491C370050FE01 /* GoogleNativeAdProvider.swift */; };
+		EFC877B22B4929CA0050FE01 /* GoogleAppOpenAdModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC877B12B4929CA0050FE01 /* GoogleAppOpenAdModifier.swift */; };
+		EFD7C9652B4D2B78004BD698 /* GoogleAppOpenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD7C9642B4D2B78004BD698 /* GoogleAppOpenModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +61,11 @@
 		EF176B292B467B100067609C /* GoogleAppOpenAdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAppOpenAdViewModel.swift; sourceTree = "<group>"; };
 		EF176B2B2B4686470067609C /* CustomOpenAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomOpenAdView.swift; sourceTree = "<group>"; };
 		EF176B2E2B477E310067609C /* GAError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAError.swift; sourceTree = "<group>"; };
+		EFC877AB2B491C260050FE01 /* GoogleRewardAdProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleRewardAdProvider.swift; sourceTree = "<group>"; };
+		EFC877AD2B491C2E0050FE01 /* GoogleBannerAdProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleBannerAdProvider.swift; sourceTree = "<group>"; };
+		EFC877AF2B491C370050FE01 /* GoogleNativeAdProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleNativeAdProvider.swift; sourceTree = "<group>"; };
+		EFC877B12B4929CA0050FE01 /* GoogleAppOpenAdModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAppOpenAdModifier.swift; sourceTree = "<group>"; };
+		EFD7C9642B4D2B78004BD698 /* GoogleAppOpenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAppOpenModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +157,7 @@
 		EF176B142B462BE70067609C /* GoogleAdMobCenter */ = {
 			isa = PBXGroup;
 			children = (
+				EFD7C9622B4D2B69004BD698 /* Modifier */,
 				EF176B2D2B477E270067609C /* Error */,
 				EF176B222B463A340067609C /* GoogleAppOpenAd */,
 				EF176B182B462BF60067609C /* Reward */,
@@ -159,6 +170,8 @@
 		EF176B162B462BF10067609C /* NativeAd */ = {
 			isa = PBXGroup;
 			children = (
+				EFC877AA2B491C170050FE01 /* ViewModel */,
+				EFC877AF2B491C370050FE01 /* GoogleNativeAdProvider.swift */,
 			);
 			path = NativeAd;
 			sourceTree = "<group>";
@@ -166,6 +179,8 @@
 		EF176B172B462BF40067609C /* Banner */ = {
 			isa = PBXGroup;
 			children = (
+				EFC877A92B491C150050FE01 /* ViewModel */,
+				EFC877AD2B491C2E0050FE01 /* GoogleBannerAdProvider.swift */,
 			);
 			path = Banner;
 			sourceTree = "<group>";
@@ -173,6 +188,8 @@
 		EF176B182B462BF60067609C /* Reward */ = {
 			isa = PBXGroup;
 			children = (
+				EFC877A82B491C110050FE01 /* ViewModel */,
+				EFC877AB2B491C260050FE01 /* GoogleRewardAdProvider.swift */,
 			);
 			path = Reward;
 			sourceTree = "<group>";
@@ -223,6 +240,7 @@
 			children = (
 				EF176B252B4677AF0067609C /* GoogleAppOpenAdView.swift */,
 				EF176B2B2B4686470067609C /* CustomOpenAdView.swift */,
+				EFC877B12B4929CA0050FE01 /* GoogleAppOpenAdModifier.swift */,
 			);
 			path = OpenAdview;
 			sourceTree = "<group>";
@@ -241,6 +259,43 @@
 				EF176B2E2B477E310067609C /* GAError.swift */,
 			);
 			path = Error;
+			sourceTree = "<group>";
+		};
+		EFC877A82B491C110050FE01 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		EFC877A92B491C150050FE01 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		EFC877AA2B491C170050FE01 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		EFD7C9622B4D2B69004BD698 /* Modifier */ = {
+			isa = PBXGroup;
+			children = (
+				EFD7C9632B4D2B6D004BD698 /* OpenAd */,
+			);
+			path = Modifier;
+			sourceTree = "<group>";
+		};
+		EFD7C9632B4D2B6D004BD698 /* OpenAd */ = {
+			isa = PBXGroup;
+			children = (
+				EFD7C9642B4D2B78004BD698 /* GoogleAppOpenModel.swift */,
+			);
+			path = OpenAd;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -384,8 +439,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF176B2F2B477E310067609C /* GAError.swift in Sources */,
+				EFC877B02B491C370050FE01 /* GoogleNativeAdProvider.swift in Sources */,
+				EFC877AC2B491C260050FE01 /* GoogleRewardAdProvider.swift in Sources */,
+				EFC877AE2B491C2E0050FE01 /* GoogleBannerAdProvider.swift in Sources */,
 				EF176B262B4677AF0067609C /* GoogleAppOpenAdView.swift in Sources */,
 				EF176B242B463A3F0067609C /* GoogleAppOpenAdProvider.swift in Sources */,
+				EFC877B22B4929CA0050FE01 /* GoogleAppOpenAdModifier.swift in Sources */,
+				EFD7C9652B4D2B78004BD698 /* GoogleAppOpenModel.swift in Sources */,
 				EF176B2A2B467B100067609C /* GoogleAppOpenAdViewModel.swift in Sources */,
 				EF176ADE2B4628D20067609C /* GoogleAdMobSwiftUIApp.swift in Sources */,
 				EF176B2C2B4686470067609C /* CustomOpenAdView.swift in Sources */,

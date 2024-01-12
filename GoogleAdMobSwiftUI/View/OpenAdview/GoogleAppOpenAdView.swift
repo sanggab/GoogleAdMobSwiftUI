@@ -14,24 +14,36 @@ public struct GoogleAppOpenAdView: View {
     private let appOpenAdProivder = GoogleAppOpenAdProvider.makeFeatures()
     
     public var body: some View {
-        CustomOpenAdView {
-            Text("hi Nice To meet You")
-        }
-        .requestLoadAppOpenAd(rootViewController: $mainVC)
-        .isShowingAd { state in
-            print("state -> \(state)")
-        }
-        .dismissOpenAd {
-            print("dismissOpenAd")
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-            self.mainVC = UIApplication.shared.firstKeyWindow?.rootViewController
-        }
+
+        Text("어디 한 번 불러보자")
+            .appOpenAd(isPresented: $openView, rootViewController: $mainVC)
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                self.mainVC = UIApplication.shared.firstKeyWindow?.rootViewController
+            }
+            .onTapGesture {
+                openView = true
+            }
+        
+        //        CustomOpenAdView {
+        //            Text("hi Nice To meet You")
+        //        }
+        //        .requestLoadAppOpenAd(rootViewController: $mainVC)
+        //        .isShowingAd { state in
+        //            print("state -> \(state)")
+        //        }
+        //        .dismissOpenAd {
+        //            print("dismissOpenAd")
+        //        }
+        //        .testView {
+        //            Rectangle()
+        //                .frame(width: 40, height: 40)
+        //                .background(.red)
+        //        }
     }
 }
 
-struct GoogleAppOpenAdView_Previews: PreviewProvider {
-    static var previews: some View {
-        GoogleAppOpenAdView()
-    }
-}
+//struct GoogleAppOpenAdView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        GoogleAppOpenAdView()
+//    }
+//}

@@ -11,11 +11,12 @@ public struct CustomOpenAdView<ContentView: View>: View {
     
     private var content: () -> ContentView
     
-//    private var isLoadedComplete: ((Bool) -> Void)?
     private var isShowingAds: ((Bool) -> Void)?
     private var dismissAdHandler: (() -> Void)?
     
     @Binding private var testVC: UIViewController?
+    
+    @State private var openViewTest: Bool = false
     
     private var rootViewController: UIViewController?
     
@@ -36,9 +37,10 @@ public struct CustomOpenAdView<ContentView: View>: View {
             .onReceive(appOpenAdProivder.viewModel.$isShowingAd.dropFirst()) { output in
                 if output {
                     isShowingAds?(true)
-                    dismissAdHandler?()
                 } else {
                     isShowingAds?(false)
+                    dismissAdHandler?()
+                    openViewTest = true
                 }
             }
             .onChange(of: testVC) { newValue in
@@ -49,41 +51,37 @@ public struct CustomOpenAdView<ContentView: View>: View {
             }
     }
     
-//    public func isLoadedOpenAd(_ state: ((Bool) -> Void)?) -> Self {
+//    
+//    public func setRootViewController(rootViewController: UIViewController?) -> Self {
 //        var view = self
-//        view.isLoadedComplete = state
+//        view.rootViewController = rootViewController
+//        view.appOpenAdProivder.requestAppOpenAd()
 //        return view
 //    }
-    
-    public func setRootViewController(rootViewController: UIViewController?) -> Self {
-        var view = self
-        view.rootViewController = rootViewController
-        view.appOpenAdProivder.requestAppOpenAd()
-        return view
-    }
-    
-    public func requestLoadAppOpenAd(rootViewController: Binding<UIViewController?>) -> Self {
-        var view = self
-        view._testVC = rootViewController
-        return view
-    }
-    
-    public func loadedRequestAd() -> Self {
-        appOpenAdProivder.requestAppOpenAd()
-        return self
-    }
-    
-    public func isShowingAd(_ state: ((Bool) -> Void)?) -> Self {
-        var view = self
-        view.isShowingAds = state
-        return view
-    }
-    
-    public func dismissOpenAd(_ handler: (() -> Void)?) -> Self {
-        var view = self
-        view.dismissAdHandler = handler
-        return view
-    }
+//    
+//    public func requestLoadAppOpenAd(rootViewController: Binding<UIViewController?>) -> Self {
+//        var view = self
+//        view._testVC = rootViewController
+//        return view
+//    }
+//    
+//    public func loadedRequestAd() -> Self {
+//        appOpenAdProivder.requestAppOpenAd()
+//        return self
+//    }
+//    
+//    public func isShowingAd(_ state: ((Bool) -> Void)?) -> Self {
+//        var view = self
+//        view.isShowingAds = state
+//        return view
+//    }
+//    
+//    public func dismissOpenAd(_ handler: (() -> Void)?) -> Self {
+//        var view = self
+//        view.dismissAdHandler = handler
+//        return view
+//    }
+
 }
 
 //struct SwiftUIView_Previews: PreviewProvider {
